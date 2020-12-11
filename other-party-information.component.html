@@ -1,0 +1,374 @@
+<form>
+    <div class="other_party_information information-detail-page">
+        <h2 class="card-title">Other Party(ies) Info</h2>
+        <!-- user_dtl -->
+        <p class="information-instruction">{{explanationAndInformation}} </p>
+        <div id="data-grid-demo">
+            <p class="guid_line">{{addOtherPartyGuidLine}}</p>
+            <dx-data-grid id="gridContainer" *ngIf="ApplicationFormData"  [dataSource]="OtherPartiesUser"
+                keyExpr="partyId" [showBorders]="true" (onRowInserted)="saveOtherPartyInformation($event)"
+                (onRowUpdating)="OnOtherPartyInfoEditSubmit($event)" (onEditingStart)="StateCountryUpdate($event)"
+                (onEditorPreparing)="onEditorPreparing($event)">
+                <dxo-paging [enabled]="false"></dxo-paging>
+               
+                <dxo-editing mode="form" [allowAdding]="editApplicationFormPermission"
+                    [allowUpdating]="editApplicationFormPermission" [useIcons]="true">
+                    <dxo-form>
+                        <dxi-item itemType="group" [colSpan]="2" [colCount]="2" caption="Other Party(ies) Information">
+
+                            <dxi-item dataField="partyFullLegelName" [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Party's full Legal Name"></dxo-label>
+                                <dxi-validation-rule type="required" message="Party Full Legal Name is required">
+                                </dxi-validation-rule>
+                            </dxi-item>
+
+                            <dxi-item itemType="group" cssClass="Info_icon_dtl">
+                                <!-- OTpartyinfo_type -->
+                                <dxi-item [cssClass]="'Info_icons'">
+                                    Party Type: *
+                                    <img matTooltip="Please select the button “Essential Party” if that party participation is necessary to resolve this dispute.  Please select “Nonessential Party” if that party’s participation would be helpful (e.g., as an influential or concerned stakeholder) but is not essential to resolve this dispute."
+                                        #otherPartyTypeTooltip="matTooltip" (click)="otherPartyTypeTooltip.toggle()"
+                                        aria-label="Button that displays a tooltip when focused or hovered over"
+                                        src="assets/images/info.png" alt="">
+                                </dxi-item>
+                                <dxi-item dataField="partyType" editorType="dxRadioGroup"
+                                    [editorOptions]="{readOnly:userActionOnEdit,layout:'horizontal', items: ApplicationFormData['PartyTypeList'], displayExpr: 'Text',valueExpr: 'Value', placeholder:'Select', searchEnabled : true, showClearButton : true }">
+                                    <!-- <dxo-label text="Party Type"></dxo-label> -->
+                                    <dxi-validation-rule type="required" message="Party Type is required">
+                                    </dxi-validation-rule>
+                                </dxi-item>
+                                
+                            </dxi-item>
+
+                        </dxi-item>
+
+                        <dxi-item itemType="group" [colSpan]="2" [colCount]="2"
+                            caption="Party's Address And Contacts Informations">
+                            <dxi-item itemType="group" [colCount]="1">
+
+                                <dxi-item dataField="partyAddressLine1" [editorOptions]="{readOnly:userActionOnEdit}">
+                                    <dxo-label text="Address Line 1"></dxo-label>
+
+                                </dxi-item>
+                                <dxi-item dataField="partyAddressLine2" [editorOptions]="{readOnly:userActionOnEdit}">
+                                    <dxo-label text="Address Line 2"></dxo-label>
+
+                                </dxi-item>
+                                <dxi-item dataField="partyAddressLine3" [editorOptions]="{readOnly:userActionOnEdit}">
+                                    <dxo-label text="Address Line 3"></dxo-label>
+
+                                </dxi-item>
+                            </dxi-item>
+
+                            <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+                                <dxi-item dataField="city" [editorOptions]="{readOnly:userActionOnEdit}">
+                                    <dxo-label text="City"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="zipCode" [editorOptions]="{readOnly:userActionOnEdit}">
+                                    <dxo-label text="ZIP Code/Postal Code"></dxo-label>
+                                </dxi-item>
+                                <dxi-item dataField="countryId" [editorOptions]="{readOnly:userActionOnEdit}">
+                                    <dxo-label text="Country"></dxo-label>
+
+                                </dxi-item>
+                                <dxi-item dataField="stateId" [editorOptions]="{readOnly:userActionOnEdit}">
+                                    <dxo-label text="State"></dxo-label>
+                                </dxi-item>
+
+                                <dxi-item itemType="group" [colSpan]="1" [colCount]="1">
+                                    <dxi-item itemType="group">
+                                        <dxi-item dataField="officeNumber">
+                                            <dxo-label text="Company Phone Number(+ Country code and phone number)">
+                                            </dxo-label>
+                                            <!-- <dxi-validation-rule type="custom" [validationCallback]="phoneValidation" message="Phone Number must be 7 to 15 digit">
+                                    </dxi-validation-rule>  [editorOptions]="{format:defaultPhoneFormat }"-->
+                                        </dxi-item>
+                                        <!-- <dxi-item cssClass="Info_icons">
+                                            <img matTooltip="Please add phone in following format: “First put '+'sign then Country Code and then after Area Code Number"
+                                                #tooltip="matTooltip" (click)="tooltip.toggle()"
+                                                aria-label="Button that displays a tooltip when focused or hovered over"
+                                                src="assets/images/info.png" alt="">
+                                        </dxi-item> -->
+                                    </dxi-item>
+                                </dxi-item>
+
+
+
+                                <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+                            </dxi-item>
+                        </dxi-item>
+
+                        <dxi-item itemType="group" [colSpan]="2" [colCount]="2"
+                            caption="Individual Contact Information">
+
+                            <dxi-item dataField="partyPrimaryContactLastName"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Last Name"></dxo-label>
+
+                            </dxi-item>
+
+                            <dxi-item dataField="partyPrimaryContactName" [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="First Name"></dxo-label>
+
+                            </dxi-item>
+
+                            <dxi-item dataField="partyPrimaryContactJobTitle"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Job Title"></dxo-label>
+
+                            </dxi-item>
+                            <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+                            <!-- <dxi-item itemType="group">
+                            </dxi-item> -->
+                            <dxi-item itemType="group" cssClass="Info_icon_dtl">
+                                <!-- OTicon_email -->
+                               
+                                <dxi-item dataField="emailAddress" [editorOptions]="{readOnly:userActionOnEdit}">
+                                    <!-- <dxo-label text="Party Contact Email"></dxo-label> -->
+                                    <dxi-validation-rule type="required" message="Email is required">
+                                    </dxi-validation-rule>
+                                </dxi-item>
+                                <dxi-item cssClass="Info_icons">
+                                    Party Contact Email: *
+                                    <img matTooltip="Please enter E-mail for communication" #otherEmailTooltip="matTooltip"
+                                        (click)="otherEmailTooltip.toggle()"
+                                        aria-label="Button that displays a tooltip when focused or hovered over"
+                                        src="assets/images/info.png" alt="">
+
+                                </dxi-item>
+                            </dxi-item>
+
+                            <dxi-item itemType="group" [colSpan]="1" [colCount]="1">
+                                <dxi-item itemType="group">
+                                    <dxi-item dataField="mobileNumber">
+                                        <dxo-label text="Party Mobile Number(+ Country code and phone number)">
+                                        </dxo-label>
+                                        <!-- <dxi-validation-rule type="custom" [validationCallback]="phoneValidation" message="Phone Number must be 7 to 15 digit">
+                                </dxi-validation-rule> -->
+                                    </dxi-item>
+                                    <!-- <dxi-item cssClass="Info_icons">
+                                        <img matTooltip="Please add phone in following format: “First put '+'sign then Country Code and then after Area Code Number"
+                                            #tooltip="matTooltip" (click)="tooltip.toggle()"
+                                            aria-label="Button that displays a tooltip when focused or hovered over"
+                                            src="assets/images/info.png" alt="">
+                                    </dxi-item> -->
+                                </dxi-item>
+                            </dxi-item>
+
+
+                        </dxi-item>
+                        <dxi-item itemType="group" [colSpan]="2" [colCount]="2"
+                            caption="Legal Counsel for that Party (if known)">
+                            <dxi-item itemType="group" [colSpan]="2" [colCount]="2" caption="If you know it, please provide here the name of any external legal counsel who you
+                            believe is or will be representing that party in any litigation or arbitration
+                            proceedings."></dxi-item>
+                            <dxi-item dataField="partyLegalCounselLawFirm"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Law Firm"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="partyLegalCounselLawyerLastName"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Lawyer's Last Name"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="partyLegelCounselName" [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Lawyer's First Name"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="partyLegalCounselLawyerEmailAddress"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Lawyer's Email"></dxo-label>
+                            </dxi-item>
+
+                            <dxi-item itemType="group" [colSpan]="1" [colCount]="1">
+                                <dxi-item itemType="group">
+                                    <dxi-item dataField="partyLegalCounselLawyerMobileNumber">
+                                        <dxo-label text="Mobile Number(+ Country code and phone number)"></dxo-label>
+                                        <!-- <dxi-validation-rule type="custom" [validationCallback]="phoneValidation" message="Phone Number must be 7 to 15 digit">
+                                </dxi-validation-rule> -->
+                                    </dxi-item>
+                                    <!-- <dxi-item cssClass="Info_icons">
+                                        <img matTooltip="Please add phone in following format: “First put '+'sign then Country Code and then after Area Code Number"
+                                            #tooltip="matTooltip" (click)="tooltip.toggle()"
+                                            aria-label="Button that displays a tooltip when focused or hovered over"
+                                            src="assets/images/info.png" alt="">
+                                    </dxi-item> -->
+                                </dxi-item>
+                            </dxi-item>
+                            <!--PrimaryContactPhoneNumber remaned as office number-->
+                            <dxi-item itemType="group" [colSpan]="1" [colCount]="1">
+                                <dxi-item itemType="group">
+                                    <dxi-item dataField="partyLegalCounselLawyerPhoneNumber">
+                                        <dxo-label text="Office Number(+ Country code and phone number)"></dxo-label>
+                                        <!-- <dxi-validation-rule type="custom" [validationCallback]="phoneValidation" message="Phone Number must be 7 to 15 digit">
+                                </dxi-validation-rule> -->
+                                    </dxi-item>
+                                    <!-- <dxi-item cssClass="Info_icons">
+                                        <img matTooltip="Please add phone in following format: “First put '+'sign then Country Code and then after Area Code Number"
+                                            #tooltip="matTooltip" (click)="tooltip.toggle()"
+                                            aria-label="Button that displays a tooltip when focused or hovered over"
+                                            src="assets/images/info.png" alt="">
+                                    </dxi-item> -->
+                                </dxi-item>
+                            </dxi-item>
+                            <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+                        </dxi-item>
+                        <!-- address chanegs start-->
+                        <dxi-item itemType="group" [colCount]="1">
+
+                            <dxi-item dataField="partyLegalCounselLawyerAddressLine1"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Address Line 1"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="partyLegalCounselLawyerAddressLine2"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Address Line 2"></dxo-label>
+
+                            </dxi-item>
+                            <dxi-item dataField="partyLegalCounselLawyerAddressLine3"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Address Line 3"></dxo-label>
+
+                            </dxi-item>
+                            <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+                        </dxi-item>
+                        <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+                            <dxi-item dataField="partyLegalCounselLawyerCity"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="City"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="partyLegalCounselLawyerZipCode"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="ZIP Code/Postal Code"></dxo-label>
+                            </dxi-item>
+                            <dxi-item dataField="partyLegalCounselLawyerCountryId"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="Country"></dxo-label>
+
+                            </dxi-item>
+                            <dxi-item dataField="partyLegalCounselLawyerStateId"
+                                [editorOptions]="{readOnly:userActionOnEdit}">
+                                <dxo-label text="State"></dxo-label>
+                            </dxi-item>
+
+                        </dxi-item>
+
+                    </dxo-form>
+                    <dxo-texts saveRowChanges="Register">
+                    </dxo-texts>
+                </dxo-editing>
+                <dxi-column dataField="partyFullLegelName" caption="Party Full Legal Name" [width]="140"
+                    [visible]="true">
+                </dxi-column>
+                <dxi-column dataField="partyPrimaryContactLastName" caption="Last Name" [visible]="true" [width]="140">
+                </dxi-column>
+                <!-- [width]="170" -->
+                <dxi-column dataField="partyPrimaryContactName" caption="First Name" [visible]="true" [width]="140">
+                    <!-- [width]="170" -->
+                </dxi-column>
+                <dxi-column dataField="partyPrimaryContactJobTitle" caption="Title" [visible]="true">
+                    <!-- [width]="80" -->
+                </dxi-column>
+                <dxi-column dataField="emailAddress" caption="Email" [visible]="true" [width]="180">
+                    <!-- [width]="170" -->
+                </dxi-column>
+                <dxi-column dataField="mobileNumber" caption="Phone Number"  [visible]="true">
+                    <!-- [width]="170" -->
+                </dxi-column>
+                <dxi-column dataField="partyId" caption="ID" [visible]="false"></dxi-column>
+                <!-- [width]="70" -->
+                <dxi-column dataField="partyLegelCounselName" caption="Legal Counsel Name" [visible]="false">
+                </dxi-column>
+
+                <dxi-column dataField="partyAddressLine1" caption="Address Line 1" [visible]="false"></dxi-column>
+                <dxi-column dataField="partyAddressLine2" caption="Address Line 2" [visible]="false"></dxi-column>
+                <dxi-column dataField="partyAddressLine3" caption="Address Line 3" [visible]="false"></dxi-column>
+                <dxi-column dataField="countryId" [setCellValue]="setCountryValue" caption="Country" [visible]="false">
+                    <!--  [width]="125" -->
+                    <dxo-lookup *ngIf="ApplicationFormData" [dataSource]="ApplicationFormData['CountryList']"
+                        displayExpr="Text" valueExpr="Value">
+                    </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="stateId" caption="State" [visible]="false">
+                    <!-- [width]="125" -->
+                    <dxo-lookup [dataSource]="OtherPartyStateList" displayExpr="Text" valueExpr="Value">
+                    </dxo-lookup>
+
+                </dxi-column>
+                <dxi-column dataField="city" caption="city" [visible]="false"></dxi-column>
+                <dxi-column dataField="zipCode" caption="Zipcode" [visible]="false"></dxi-column>
+
+                <dxi-column dataField="officeNumber" caption="Zipcode" [width]="120" [visible]="false"></dxi-column>
+
+                <dxi-column dataField="partyType" caption="PartyType" [visible]="false">
+                    <dxo-lookup [dataSource]="ApplicationFormData['PartyTypeList']" displayExpr="Text"
+                        valueExpr="Value">
+                    </dxo-lookup>
+                </dxi-column>
+
+                <dxi-column dataField="partyLegalCounselLawFirm" caption="Legal Counsel Law Firm" [visible]="false">
+                </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerLastName" caption="Legal Counsel Lawyer LastName"
+                    [visible]="false"> </dxi-column>
+                <dxi-column dataField="partyLegelCounselName" caption="Legal Counsel Lawyer FirstName"
+                    [visible]="false"> </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerEmailAddress" caption="Legal Counsel Lawyer EmailAddress"
+                    [visible]="false"> </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerMobileNumber" caption="Legal Counsel Lawyer Mobile Number"
+                    [visible]="false" [width]="120"> </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerPhoneNumber" caption="Legal Counsel Lawyer Phone Number"
+                    [visible]="false" [width]="120"> </dxi-column>
+
+                <dxi-column dataField="partyLegalCounselLawyerAddressLine1" caption="Legal Counsel Lawyer AddressLine1"
+                    [visible]="false"> </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerAddressLine2" caption="Legal Counsel Lawyer AddressLine2"
+                    [visible]="false"> </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerAddressLine3" caption="Legal Counsel Lawyer AddressLine3"
+                    [visible]="false"> </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerCity" caption="Legal Counsel Lawyer Cit"
+                    [visible]="false"> </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerZipCode" caption="Legal Counsel Lawyer ZipCode"
+                    [visible]="false"> </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerCountryId" [setCellValue]="setLawCountryValue"
+                    caption="Legal Counsel Lawyer Country" [visible]="false">
+                    <!-- [width]="125" -->
+                    <dxo-lookup *ngIf="ApplicationFormData" [dataSource]="ApplicationFormData['CountryList']"
+                        displayExpr="Text" valueExpr="Value">
+                    </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="partyLegalCounselLawyerStateId" caption="Legal Counsel Lawyer State"
+                    [visible]="false" [width]="125">
+                    <dxo-lookup [dataSource]="LawyerStateList" displayExpr="Text" valueExpr="Value">
+                    </dxo-lookup>
+
+                </dxi-column>
+
+            </dx-data-grid>
+        </div>
+        <div class="register-case-page riskin_grid_page grid_two commmnt-area">
+
+            <dx-form>
+                <dxi-item>
+                    <dxo-label text="Comments"></dxo-label>
+                    <img matTooltip="Please post here any questions or comments you may have that you may wish your colleagues to see."
+                        #commentTooltip="matTooltip" (click)="commentTooltip.toggle()"
+                        aria-label="Button that displays a tooltip when focused or hovered over"
+                        src="assets/images/info.png" alt="" class="comment-tooltip custom-cmnt-tooltip">
+                    <div>
+                        <dx-text-area [height]="90" visible:true [(value)]="commentText">
+                        </dx-text-area>
+                    </div>
+                </dxi-item>
+            </dx-form>
+        </div>
+        <!-- </div> -->
+
+        <dx-button text="Save & Next" type="success" [visible]="editApplicationFormPermission" (onClick)="OnNextClick()"
+            [useSubmitBehavior]="false">
+        </dx-button>
+        <dx-button text="Prev" type="success" [visible]="editApplicationFormPermission" (onClick)="OnPrevClick()"
+            [useSubmitBehavior]="false">
+        </dx-button>
+
+    </div>
+
+
+</form>

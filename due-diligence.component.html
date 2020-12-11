@@ -1,0 +1,552 @@
+<mat-horizontal-stepper #stepper labelPosition="bottom">
+  <mat-step>
+    <ng-template matStepLabel>ADR</ng-template>
+    <div class="glasl_table">
+      <p class="information-instruction">*It is required to create Authorized Representative before proceeding for
+        filling up the Application Form. Please create one if not already created.</p>
+      <form (ngSubmit)="onSubmit($event)">
+        <dx-form id="form" #dynamicForm [(formData)]="FormControlsAnswers"
+          [readOnly]="!ApplicationFormData['editApplicationFormPermission']">
+          <ng-container *ngIf="ADRDataObj">
+
+            <ng-container *ngFor="let section of ADRDataObj['sections']">
+              <dxi-item [cssClass]="'glas_title due_dili_title'"><span>{{section?.sectionName}} :
+                  {{section?.sectionDescription}} </span>
+              </dxi-item>
+              <dxi-item itemType="group" [cssClass]="'glsl_table_group'">
+                <ng-container>
+                  <dxi-item itemType="group" [colSpan]="2" [cssClass]="'view-with-multi'" [colCount]="2">
+                    <dxi-item>
+                      Question
+                      <div *dxTemplate>
+                      </div>
+                    </dxi-item>
+                    <dxi-item>
+                      Your answer
+                      <div *dxTemplate>
+                      </div>
+                    </dxi-item>
+                  </dxi-item>
+
+                  <ng-container *ngFor="let question of  section['questions'];let i=index;">
+                    <ng-container [ngSwitch]="question.questionType">
+                      <dxi-item itemType="group" [colSpan]="2" [colCount]="2">
+                        <dxi-item>
+                          {{i+1}}. {{question.questionText}}
+                          <div *dxTemplate>
+                          </div>
+                        </dxi-item>
+                        <dxi-item *ngSwitchCase="ControlType.DropDown" editorType="dxSelectBox"
+                          [label]="{text:'',visible:false}" [editorOptions]="ControlConfig[question.questionId]"
+                          dataField="{{section.sectionId}}[{{question.questionId}}]">
+                          <dxo-label text="Estimated Value"></dxo-label>
+                          <dxi-validation-rule type="required" message="This Answer is required" *ngIf="requiredField">
+                          </dxi-validation-rule>
+                        </dxi-item>
+
+                      </dxi-item>
+
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </dxi-item>
+            </ng-container>
+          </ng-container>
+
+        </dx-form>
+        <div class="register-case-page riskin_grid_page grid_two commmnt-area">
+          <dx-form [readOnly]="!editApplicationFormPermission">
+            <dxi-item>
+              <dxo-label text="Comments"></dxo-label>
+              <div>
+                <img
+                  matTooltip="Please post here any questions or comments you may have that you may wish your colleagues to see."
+                  #tooltip="matTooltip" (click)="tooltip.toggle()"
+                  aria-label="Button that displays a tooltip when focused or hovered over" src="assets/images/info.png"
+                  alt="" class="comment-tooltip custom-cmnt-tooltip">
+                <dx-text-area [height]="90" visible:true [(value)]="commentTextADR">
+                </dx-text-area>
+              </div>
+            </dxi-item>
+          </dx-form>
+          <br>
+          <dx-form>
+            <dxi-item itemType="group" [cssClass]="'button_group'" [visible]="editApplicationFormPermission">
+              <dxi-item itemType="button" stylingMode="contained" horizontalAlignment="right" class="button_info"
+                [buttonOptions]="ButtonOptions"></dxi-item>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </form>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>{{IntrestVsPosition}}</ng-template>
+
+    <div class="gride-area">
+      <p class="information-instruction">*It is required to create Authorized Representative before proceeding for
+        filling up the Application Form. Please create one if not already created.</p>
+      <div class="register-case-page due_diligence">
+        <ng-container *ngIf="IntrestVsPosition">
+
+          <h2 class="card-title">{{labelDetail.get("1")}}</h2>
+          <dx-data-grid #questionListGrid1 [dataSource]="ExerciseUsersAnsewerGrid1" [showBorders]="true" id="gridContainer">
+            <!-- cssClass="due_diligence_table" -->
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing mode="row" [allowAdding]="editApplicationFormPermission" [allowUpdating]="editApplicationFormPermission" [allowDeleting]="editApplicationFormPermission"
+              [useIcons]="true"> </dxo-editing>
+            <dxi-column dataField='{{labelDetail.get("3")}}' caption='{{labelDetail.get("3")}}'></dxi-column>
+            <dxi-column dataField='{{labelDetail.get("4")}}' caption='{{labelDetail.get("4")}}'></dxi-column>
+
+          </dx-data-grid>
+          <h2 class="card-title"> {{labelDetail.get("2")}}</h2>
+          <dx-data-grid #questionListGrid2 [dataSource]="ExerciseUsersAnsewerGrid2" [showBorders]="true">
+            <dxo-editing mode="row" [allowAdding]="editApplicationFormPermission" [allowUpdating]="editApplicationFormPermission" [allowDeleting]="editApplicationFormPermission"
+              [useIcons]="true"> </dxo-editing>
+            <dxi-column dataField='{{labelDetail.get("5")}}' caption='{{labelDetail.get("5")}}'></dxi-column>
+            <dxi-column dataField='{{labelDetail.get("6")}}' caption='{{labelDetail.get("6")}}'></dxi-column>
+          </dx-data-grid>
+
+          <div class="register-case-page riskin_grid_page grid_two commmnt-area">
+            <dx-form [readOnly]="!editApplicationFormPermission">
+              <dxi-item>
+                <dxo-label text="Comments"></dxo-label>
+                <div>
+                  <img
+                    matTooltip="Please post here any questions or comments you may have that you may wish your colleagues to see."
+                    #tooltip="matTooltip" (click)="tooltip.toggle()"
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                    src="assets/images/info.png" alt="" class="comment-tooltip custom-cmnt-tooltip">
+                  <dx-text-area [height]="90" visible:true [(value)]="commentTextIvsP">
+                  </dx-text-area>
+                </div>
+              </dxi-item>
+            </dx-form>
+          </div>
+
+          <div class="form-action action_btn">
+            <br>
+            <dx-button stylingMode="contained" text="Prev" type="default" [width]="120" (click)="OnPrevClick($event)"  [visible]="editApplicationFormPermission">
+            </dx-button>
+            <dx-button stylingMode="contained" text="Save&Next" type="default" [useSubmitBehavior]="true" [width]="120"
+              (click)="addOrUpdateExercise()"  [visible]="editApplicationFormPermission">
+              <span class='dx-button-text'>Save & Next</span>
+            </dx-button>
+          </div>
+
+        </ng-container>
+      </div>
+      <!-- <dxi-item itemType="button" stylingMode="contained" horizontalAlignment="right" class="button_info"
+    [buttonOptions]="ButtonOptions"></dxi-item>
+
+    <dxi-item class="button_info"> <a (click)="OnPrevClick()" class="grid-custom-action">Prev</a> </dxi-item> -->
+
+    </div>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>{{ICNMs}}</ng-template>
+
+    <div class="gride-area">
+      <p class="information-instruction">*It is required to create Authorized Representative before proceeding for
+        filling up the Application Form. Please create one if not already created.</p>
+      <div class="register-case-page due_diligence">
+        <ng-container *ngIf="ICNMs">
+          <h2 class="card-title">{{labelDetail.get("7")}}</h2>
+          <dx-data-grid #icnmsGrid [dataSource]="ExerciseUsersAnsewerGrid3" [showBorders]="true" id="gridContainer">
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing mode="row" [allowAdding]="editApplicationFormPermission" [allowUpdating]="editApplicationFormPermission" [allowDeleting]="editApplicationFormPermission"
+              [useIcons]="true"> </dxo-editing>
+            <dxi-column dataField='{{labelDetail.get("8")}}' caption='{{labelDetail.get("8")}}'></dxi-column>
+            <dxi-column dataField='{{labelDetail.get("9")}}' caption='{{labelDetail.get("9")}}'></dxi-column>
+          </dx-data-grid>
+
+          <div class="register-case-page riskin_grid_page grid_two commmnt-area ">
+            <br>
+
+            <dx-form [readOnly]="!editApplicationFormPermission">
+              <dxi-item >
+                <dxo-label text="Comments"></dxo-label>
+                <div>
+                  <img
+                    matTooltip="Please post here any questions or comments you may have that you may wish your colleagues to see."
+                    #tooltip="matTooltip" (click)="tooltip.toggle()"
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                    src="assets/images/info.png" alt="" class="comment-tooltip custom-cmnt-tooltip">
+                  <dx-text-area [height]="90" visible:true [(value)]="commentTextICNMs">
+                  </dx-text-area>
+                </div>
+              </dxi-item>
+            </dx-form>
+          </div>
+
+          <div class="form-action action_btn">
+            <br>
+            <dx-button stylingMode="contained" text="Prev" type="default" [width]="120" (click)="OnPrevClick($event)"  [visible]="editApplicationFormPermission">
+            </dx-button>
+            <dx-button stylingMode="contained" text="Save & Next" type="default" [useSubmitBehavior]="true"
+              [width]="120" (click)="addOrUpdateIcnmsExercise()"  [visible]="editApplicationFormPermission"> 
+              <span class='dx-button-text'>Save & Next</span>
+            </dx-button>
+          </div>
+        </ng-container>
+
+      </div>
+
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>{{ALTERNATIVES}}</ng-template>
+    <div class="glasl_table">
+      <p class="information-instruction">*It is required to create Authorized Representative before proceeding for
+        filling up the Application Form. Please create one if not already created.</p>
+      <form (ngSubmit)="addOrUpdateAlternative()">
+        <dx-form id="form" [(formData)]="AlternativeFormAnswers" [showColonAfterLabel]="false" [readOnly]="!editApplicationFormPermission">
+          <dxi-item itemType="group" [cssClass]="'glsl_table_group due_table_group'">
+
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="'view-with-multi cstm-alt-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <div *dxTemplate> </div>
+              </dxi-item>
+              <dxi-item>
+                <span>{{labelDetail?.get("11")}}</span>
+                <div *dxTemplate> </div>
+              </dxi-item>
+              <dxi-item>
+                <span>{{labelDetail?.get("12")}}</span>
+                <div *dxTemplate> </div>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="'first_row cstm-alt-body-grid'">
+              <dxi-item>
+                <div class="alternative_label">{{labelDetail?.get("13")}}</div>
+              </dxi-item>
+              <dxi-item>
+                {{labelDetail?.get("14")}}
+                <div class="label_hide">{{labelDetail?.get("13")}}</div>
+                <div *dxTemplate> </div>
+              </dxi-item>
+              <dxi-item dataField="BantaTimeAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="BantaTimePartnersAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <span>{{labelDetail?.get("15")}}</span>
+                <div *dxTemplate> </div>
+              </dxi-item>
+              <dxi-item dataField="BantaCostAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="BantaCostPartnersAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <span>{{labelDetail?.get("16")}}</span>
+                <div *dxTemplate> </div>
+              </dxi-item>
+              <dxi-item dataField="BantaOutcomeAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="BantaOutcomePartnersAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <span>{{labelDetail?.get("17")}}</span>
+                <div *dxTemplate> </div>
+              </dxi-item>
+              <dxi-item dataField="BantaConsequesncesAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="BantaConsequesncesPartnersAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item>
+                <div class="alternative_label">{{labelDetail?.get("18")}}</div>
+              </dxi-item>
+              <dxi-item>
+                {{labelDetail?.get("19")}}
+                <div class="label_hide">{{labelDetail?.get("18")}}</div>
+                <div *dxTemplate> </div>
+              </dxi-item>
+              <dxi-item dataField="WantaTimeAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="WantaTimePartnerAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <!-- Cost -->
+                <span>{{labelDetail?.get("20")}}</span>
+                <div *dxTemplate>
+                </div>
+              </dxi-item>
+              <dxi-item dataField="WantaCostAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="WantaCostPartnerAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <!-- Outcome/Awards -->
+                <span>{{labelDetail?.get("21")}}</span>
+
+                <div *dxTemplate>
+                </div>
+              </dxi-item>
+              <dxi-item dataField="WantaOutcomeAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="WantaOutcomePartnerAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <!-- Consequesnces & impact on ICNMs -->
+                <span>{{labelDetail?.get("22")}}</span>
+
+                <div *dxTemplate>
+                </div>
+              </dxi-item>
+              <dxi-item dataField="WantaConsequesncesAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="WantaConsequesncesPartnerAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item>
+                <div class="alternative_label">{{labelDetail?.get("27")}}</div>
+              </dxi-item>
+              <dxi-item>
+                {{labelDetail?.get("28")}}
+                <div class="label_hide">{{labelDetail?.get("27")}}</div>
+                <div *dxTemplate>
+                </div>
+              </dxi-item>
+              <dxi-item dataField="RatnaTimeAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="RatnaTimePartnerAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <span> {{labelDetail?.get("29")}}</span>
+                <div *dxTemplate>
+                </div>
+              </dxi-item>
+              <dxi-item dataField="RatnaCostAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="RatnaCostPartnerAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <span>{{labelDetail?.get("30")}}</span>
+                <div *dxTemplate>
+                </div>
+              </dxi-item>
+              <dxi-item dataField="RatnaOutecomeAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="RatnaOutcomePartnerAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colSpan]="4" [colCount]="4" [cssClass]="' cstm-alt-body-grid'">
+              <dxi-item itemType="empty" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+              <dxi-item>
+                <span>{{labelDetail?.get("31")}}</span>
+                <div *dxTemplate>
+                </div>
+              </dxi-item>
+              <dxi-item dataField="RatnaConsequesncesAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+              <dxi-item dataField="RantaConsequesncesPartnersAlternative" [editorOptions]="{ disabled: false }">
+                <dxo-label text="   "></dxo-label>
+              </dxi-item>
+            </dxi-item>
+
+          </dxi-item>
+        </dx-form>
+
+        <div class="register-case-page riskin_grid_page grid_two commmnt-area ">
+
+          <dx-form [readOnly]="!editApplicationFormPermission">
+            <dxi-item>
+              <dxo-label text="Comments"></dxo-label>
+              <div>
+                <img
+                  matTooltip="Please post here any questions or comments you may have that you may wish your colleagues to see."
+                  #tooltip="matTooltip" (click)="tooltip.toggle()"
+                  aria-label="Button that displays a tooltip when focused or hovered over" src="assets/images/info.png"
+                  alt="" class="comment-tooltip custom-cmnt-tooltip">
+                <dx-text-area [height]="90" visible:true [(value)]="commentTestALTERNATIVE">
+                </dx-text-area>
+              </div>
+            </dxi-item>
+          </dx-form>
+          <br>
+          <dx-form>
+            <dxi-item itemType="group" [cssClass]="'button_group'" [visible]="editApplicationFormPermission">
+              <dxi-item itemType="button" stylingMode="contained" horizontalAlignment="right" class="button_info"
+                [buttonOptions]="ButtonOptions"></dxi-item>
+              <dxi-item class="button_info"> <a (click)="OnPrevClick($event)" class="grid-custom-action">Prev</a>
+              </dxi-item>
+            </dxi-item>
+          </dx-form>
+        </div>
+      </form>
+    </div>
+
+
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>{{SWOT}}</ng-template>
+    <div class="gride-area">
+      <p class="information-instruction">*It is required to create Authorized Representative before proceeding for
+        filling up the Application Form. Please create one if not already created.</p>
+      <div class="register-case-page due_diligence">
+        <ng-container *ngIf="SWOT">
+
+          <h2 class="card-title">A. {{labelDetail?.get("49")}}</h2>
+          <dx-data-grid #SWyourGridA [dataSource]="SWOTGridAnswers1" [showBorders]="true" id="gridContainer">
+            <!-- cssClass="due_diligence_table" -->
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing mode="row" [allowAdding]="editApplicationFormPermission" [allowUpdating]="editApplicationFormPermission" [allowDeleting]="editApplicationFormPermission"
+              [useIcons]="true"> </dxo-editing>
+            <dxi-column dataField='{{labelDetail?.get("36")}}' caption='{{labelDetail?.get("36")}}'></dxi-column>
+            <dxi-column dataField='{{labelDetail?.get("37")}}' caption='{{labelDetail?.get("37")}}'></dxi-column>
+          </dx-data-grid>
+          <dx-data-grid #OTyourGridA [dataSource]="SWOTGridAnswers2" [showBorders]="true" id="gridContainer">
+            <dxo-editing mode="row" [allowAdding]="editApplicationFormPermission" [allowUpdating]="editApplicationFormPermission" [allowDeleting]="editApplicationFormPermission"
+              [useIcons]="true"> </dxo-editing>
+            <dxi-column dataField='{{labelDetail?.get("39")}}' caption='{{labelDetail?.get("39")}}'></dxi-column>
+            <dxi-column dataField='{{labelDetail?.get("40")}}' caption='{{labelDetail?.get("40")}}'></dxi-column>
+          </dx-data-grid>
+          <h2 class="card-title">B. {{labelDetail?.get("50")}}</h2>
+          <dx-data-grid #SWotherGridB [dataSource]="SWOTGridAnswers3" [showBorders]="true" id="gridContainer">
+            <!-- cssClass="due_diligence_table" -->
+            <dxo-paging [enabled]="false"></dxo-paging>
+            <dxo-editing mode="row" [allowAdding]="editApplicationFormPermission" [allowUpdating]="editApplicationFormPermission" [allowDeleting]="editApplicationFormPermission"
+              [useIcons]="true"> </dxo-editing>
+            <dxi-column dataField='{{labelDetail?.get("44")}}' caption='{{labelDetail?.get("44")}}'></dxi-column>
+            <dxi-column dataField='{{labelDetail?.get("45")}}' caption='{{labelDetail?.get("45")}}'></dxi-column>
+          </dx-data-grid>
+          <dx-data-grid #OTotherGridB [dataSource]="SWOTGridAnswers4" [showBorders]="true" id="gridContainer">
+            <dxo-editing mode="row" [allowAdding]="editApplicationFormPermission" [allowUpdating]="editApplicationFormPermission" [allowDeleting]="editApplicationFormPermission"
+              [useIcons]="true"> </dxo-editing>
+            <dxi-column dataField='{{labelDetail?.get("47")}}' caption='{{labelDetail?.get("47")}}'></dxi-column>
+            <dxi-column dataField='{{labelDetail?.get("48")}}' caption='{{labelDetail?.get("48")}}'></dxi-column>
+          </dx-data-grid>
+
+          <div class="register-case-page riskin_grid_page grid_two commmnt-area ">
+
+            <dx-form [readOnly]="!editApplicationFormPermission">
+              <dxi-item>
+                <dxo-label text="Comments"></dxo-label>
+                <div>
+                  <img
+                    matTooltip="Please post here any questions or comments you may have that you may wish your colleagues to see."
+                    #tooltip="matTooltip" (click)="tooltip.toggle()"
+                    aria-label="Button that displays a tooltip when focused or hovered over"
+                    src="assets/images/info.png" alt="" class="comment-tooltip custom-cmnt-tooltip">
+                  <dx-text-area [height]="90" visible:true [(value)]="commentTextSWOT">
+                  </dx-text-area>
+                </div>
+              </dxi-item>
+            </dx-form>
+          </div>
+          <div class="form-action action_btn">
+            <br>
+            <dx-button stylingMode="contained" text="Prev" type="default" [width]="120" (click)="OnPrevClick($event)"  [visible]="editApplicationFormPermission">
+            </dx-button>
+            <dx-button stylingMode="contained" text="Save&Next" type="default" [useSubmitBehavior]="true" [width]="120"
+              (click)="addOrUpdateSWOT()"  [visible]="editApplicationFormPermission">
+              <span class='dx-button-text'>Save & Next</span>
+            </dx-button>
+          </div>
+
+        </ng-container>
+
+      </div>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>RESULT</ng-template>
+    <div><br>I consent to the ADR neutral seeing the results of the Due Diligence Form.</div>
+    <!--mediator Due diligence  -->
+    <br>
+    <div>
+      <dx-radio-group [items]="radioOption" [value]='dueDeligenceAdminSharereturn'
+        (onValueChanged)="shareDueDiligencePermition($event)" layout="horizontal" [readOnly]="!editApplicationFormPermission">
+
+        <!--[items]="radioOption"   [value]='dueDeligenceAdminSharereturn' -->
+      </dx-radio-group>
+    </div>
+    <dx-form id="form" [readOnly]="!ApplicationFormData['editApplicationFormPermission']">
+      <dxi-item itemType="empty" [cssClass]="'button_group'" [editorOptions]="{'min-width': '50%'}"></dxi-item>
+
+      <dxi-item itemType="group" [cssClass]="'button_group'"  [visible]="editApplicationFormPermission">
+        <dxi-item [cssClass]="'button_info'" >
+          <a (click)="onSubmitResult($event)" class="grid-custom-action">Finish</a>
+        </dxi-item>
+        <dxi-item [cssClass]="'button_info back_btn'">
+          <!-- "'button_info back_btn'" -->
+          <dx-button stylingMode="outlined" text="Prev" type="normal" [width]="120" horizontalAlignment="right"
+            (click)="OnPrevClick($event)" >
+          </dx-button>
+        </dxi-item>
+      </dxi-item>
+      <!-- <button >Finish</button> -->
+
+      <dxi-item *ngIf="EnableApproveButton" [visible]="editApplicationFormPermission" horizontalAlignment="left">
+        <!-- <div class="register-case-page due_diligence_tab button_info"> -->
+        <a (click)="OnApproveApplicationForm()" class="grid-custom-action approve_btn">Approve</a>
+        <!-- </div> -->
+      </dxi-item>
+
+    </dx-form>
+    <dx-popup [width]="360" [showTitle]="true" class="custom-popup provide-access-popup"
+        [(visible)]="ViewAccesPopupVisible" [closeOnOutsideClick]="true">
+      
+                <div>
+                    <p>
+                        {{errorMessageForApprove}}
+                    </p>
+                </div>
+                <dx-button stylingMode="contained" text="OK" type="default" (click)="popUpSubmitCall()" style="margin : 0 40% ">
+                </dx-button>
+               
+    </dx-popup>
+  </mat-step>
+</mat-horizontal-stepper>
